@@ -33,7 +33,7 @@ export function HeaderSearch({
 }) {
   return (
     <div
-      className={`flex w-full max-w-full min-w-0 items-center gap-1 rounded-md border border-[#F5F9E5]/14 bg-[#475B35] p-1 shadow-sm ${className}`.trim()}
+      className={`emb-header-search-enter flex w-full max-w-full min-w-0 items-center gap-1 rounded-md border border-[#F5F9E5]/14 bg-[#475B35] p-1 shadow-sm ${className}`.trim()}
     >
       <div className="flex min-w-0 flex-1 items-center rounded-[4px] bg-[#6f7754] px-3 py-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.07)]">
         <input

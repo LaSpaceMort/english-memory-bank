@@ -18,7 +18,7 @@
    */
   --emb-unit-frost-base: rgba(255, 255, 255, 0.25);
   /** 列内标题 / 折叠卡片壳：薄白叠层（与展开区渐变 var 引用保持一致） */
-  --emb-unit-frost-layer: rgba(255, 255, 255, 0.305);
+  --emb-unit-frost-layer: rgba(255, 255, 255, 0.405);
   --emb-panel-deep: #3d3028;
   --emb-font: "Satoshi", system-ui, sans-serif;
   /** 侧栏未选导航 & 首页搜索栏轨道 */
@@ -136,6 +136,7 @@ body {
   }
 
   .emb-home-title-slide,
+  .emb-header-search-enter,
   .emb-unit-col-from-left,
   .emb-unit-col-from-center,
   .emb-unit-col-from-right,
@@ -151,6 +152,13 @@ body {
 /** 内页大标题：从左滑入（主页 Unit、Material/Upload 等 SubpageHeader） */
 .emb-home-title-slide {
   animation: emb-home-title-slide 0.52s cubic-bezier(0.2, 0.82, 0.32, 1) both;
+  backface-visibility: hidden;
+}
+
+/** 顶栏搜索条：从右向左滑入（与 emb-pg-from-right 同轨） */
+.emb-header-search-enter {
+  animation: emb-pg-from-right 0.52s cubic-bezier(0.2, 0.82, 0.32, 1) both;
+  animation-delay: 0.12s;
   backface-visibility: hidden;
 }
 
