@@ -1,0 +1,426 @@
+@import "tailwindcss";
+
+:root {
+  --emb-sidebar: #475b35;
+  --emb-sidebar-pill: #3d5030;
+  --emb-accent: #d4604d;
+  --emb-accent-hover: #c55545;
+  /** 主区内页底：偏暖的米杏色（少灰、略偏黄） */
+  --emb-main: #f2e2c2;
+  --emb-heading: #475b35;
+  --emb-text: #4a4f3e;
+  /** 全局半透明磨砂白层（Material、表单卡片等） */
+  --emb-glass-bg: rgba(255, 255, 255, 0.38);
+  /**
+   * Unit 三列磨砂：底层一块 + 上面再叠块时，不能两层都用满 0.3 白，否则 alpha 叠在浅底上会像实白。
+   * 底层：25% 白 + blur = 「最底下那层磨砂」（由 30% 降 5 个百分点）
+   * 叠层：更薄的白 + blur = 单独看也是磨砂感，叠在底层上重叠处只会略亮一档
+   */
+  --emb-unit-frost-base: rgba(255, 255, 255, 0.25);
+  --emb-unit-frost-layer: rgba(255, 255, 255, 0.055);
+  --emb-panel-deep: #3d3028;
+  --emb-font: "Satoshi", system-ui, sans-serif;
+  /** 侧栏未选导航 & 首页搜索栏轨道 */
+  /** 暖调橄榄绿（比上一版略亮） */
+  --emb-nav-inactive-bg: #6f7754;
+  /* 侧栏内容区 py-8 上沿；主区在此基础上略加，使 Unit/Material/Upload 与 English 行视觉齐平 */
+  --emb-sidebar-brand-pt: 2rem;
+  --emb-main-scroll-extra-pt: 0.5rem;
+  --emb-inner-title-fz: 2.4rem;
+  --emb-brand-leading: 1.12;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --emb-inner-title-fz: 2.8rem;
+  }
+}
+
+/** 主区内页大标题：色 #D4604D；顶距由 .emb-main-scroll 与侧栏对齐 */
+.emb-inner-page-title {
+  font-family: var(--emb-font);
+  font-size: var(--emb-inner-title-fz);
+  line-height: var(--emb-brand-leading);
+  font-weight: 900;
+  letter-spacing: -0.025em;
+  color: #d4604d;
+}
+
+/** 主区顶距：侧栏 py-8 + 少量补偿，大标题与 English 单词行对齐 */
+.emb-main-scroll {
+  padding-top: calc(var(--emb-sidebar-brand-pt) + var(--emb-main-scroll-extra-pt));
+}
+
+body {
+  margin: 0;
+  min-height: 100svh;
+  font-family: var(--emb-font);
+  color: var(--emb-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.emb-main-bg {
+  background-color: var(--emb-main);
+}
+
+.emb-col-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(212, 96, 77, 0.35) transparent;
+}
+
+.emb-col-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.emb-col-scroll::-webkit-scrollbar-thumb {
+  background: rgba(212, 96, 77, 0.35);
+  border-radius: 3px;
+}
+
+/** 侧栏：内容过高时可滚，轨道与滑块隐藏 */
+.emb-sidebar-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.emb-sidebar-scroll::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+/** 侧栏星点：仅淡入，不做缩放 */
+.emb-sidebar-star-fade {
+  animation: emb-sidebar-star-fade 0.78s ease-out both;
+}
+
+@keyframes emb-sidebar-star-fade {
+  from {
+    opacity: 0;
+  }
+  55% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.58;
+  }
+}
+
+/** 侧栏主导航：点击时极轻、偏慢的缩放 */
+.emb-sidebar-nav-tap-bump {
+  transform-origin: center center;
+  animation: emb-sidebar-nav-tap-bump 0.62s cubic-bezier(0.25, 0.46, 0.35, 1) both;
+}
+
+@keyframes emb-sidebar-nav-tap-bump {
+  from {
+    transform: scale(1);
+  }
+  42% {
+    transform: scale(1.035);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .emb-sidebar-star-fade {
+    animation: none;
+    opacity: 0.5;
+  }
+
+  .emb-sidebar-nav-tap-bump {
+    animation: none;
+    transform: none;
+  }
+
+  .emb-home-title-slide,
+  .emb-unit-col-from-left,
+  .emb-unit-col-from-center,
+  .emb-unit-col-from-right,
+  .emb-source-detail-col-left,
+  .emb-source-detail-col-right,
+  .emb-pg-content-fade {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/** 内页大标题：从左滑入（主页 Unit、Material/Upload 等 SubpageHeader） */
+.emb-home-title-slide {
+  animation: emb-home-title-slide 0.52s cubic-bezier(0.2, 0.82, 0.32, 1) both;
+  backface-visibility: hidden;
+}
+
+/** Material 卡片区、Upload 正文区：接在标题滑入之后淡入 */
+.emb-pg-content-fade {
+  animation: emb-pg-content-fade 0.56s cubic-bezier(0.2, 0.82, 0.32, 1) both;
+  animation-delay: 0.12s;
+  backface-visibility: hidden;
+}
+
+@keyframes emb-pg-content-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes emb-home-title-slide {
+  from {
+    opacity: 0;
+    transform: translate3d(-1.75rem, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes emb-pg-fade-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0.65rem, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes emb-pg-from-left {
+  from {
+    opacity: 0;
+    transform: translate3d(-2rem, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes emb-pg-from-right {
+  from {
+    opacity: 0;
+    transform: translate3d(2rem, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes emb-pg-fade-only {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/** Unit 三列：窄屏轻微上浮；md+ 左右列从外向内，中间列仅淡入 */
+.emb-unit-col-from-left,
+.emb-unit-col-from-center,
+.emb-unit-col-from-right,
+.emb-source-detail-col-left,
+.emb-source-detail-col-right {
+  backface-visibility: hidden;
+}
+
+.emb-unit-col-from-left {
+  animation: emb-pg-fade-rise 0.5s cubic-bezier(0.2, 0.82, 0.32, 1) both;
+  animation-delay: 0s;
+}
+
+.emb-unit-col-from-center {
+  animation: emb-pg-fade-rise 0.5s cubic-bezier(0.2, 0.82, 0.32, 1) both;
+  animation-delay: 0.08s;
+}
+
+.emb-unit-col-from-right {
+  animation: emb-pg-fade-rise 0.5s cubic-bezier(0.2, 0.82, 0.32, 1) both;
+  animation-delay: 0.16s;
+}
+
+@media (min-width: 768px) {
+  .emb-unit-col-from-left {
+    animation-name: emb-pg-from-left;
+  }
+
+  .emb-unit-col-from-center {
+    animation-name: emb-pg-fade-only;
+    animation-delay: 0.1s;
+  }
+
+  .emb-unit-col-from-right {
+    animation-name: emb-pg-from-right;
+  }
+}
+
+/** 外刊详情两列：lg+ 左列从左、右列从右；小屏堆叠时用淡入+错开 */
+.emb-source-detail-col-left {
+  animation: emb-pg-fade-rise 0.52s cubic-bezier(0.2, 0.82, 0.32, 1) both;
+}
+
+.emb-source-detail-col-right {
+  animation: emb-pg-fade-rise 0.52s cubic-bezier(0.2, 0.82, 0.32, 1) both;
+  animation-delay: 0.07s;
+}
+
+@media (min-width: 1024px) {
+  .emb-source-detail-col-left {
+    animation-name: emb-pg-from-left;
+    animation-delay: 0s;
+  }
+
+  .emb-source-detail-col-right {
+    animation-name: emb-pg-from-right;
+    animation-delay: 0.1s;
+  }
+}
+
+.emb-glass {
+  background: var(--emb-glass-bg);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 8px 32px rgba(71, 91, 53, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+}
+
+/* 叠在列底上的块：标题条、unit 折叠壳（薄白 + blur，避免与底层双 0.3 糊成实色） */
+.emb-unit-frost-surface {
+  background: var(--emb-unit-frost-layer);
+  backdrop-filter: blur(20px) saturate(1.05);
+  -webkit-backdrop-filter: blur(20px) saturate(1.05);
+}
+
+/* Unit 三列最底层磨砂：25% 白 */
+.emb-unit-column {
+  background: var(--emb-unit-frost-base);
+  backdrop-filter: blur(24px) saturate(1.06);
+  -webkit-backdrop-filter: blur(24px) saturate(1.06);
+  box-shadow: none;
+  border: none;
+  border-radius: 12px;
+}
+
+/* 列标题单层磨砂：顶边贴死列内容区顶，上沿不设圆角 — 由列自身圆角裁切 */
+.emb-unit-column-head {
+  flex-shrink: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.emb-unit-column-title-stack {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 0 0 12px 12px;
+  min-height: 3.05rem;
+  padding: 0.52rem 1rem;
+  /* 向两侧撑大 + 略向上顶 1px，消灭与列顶之间的亚像素缝 */
+  width: calc(100% + 2.5rem);
+  max-width: none;
+  margin: -1px -1.25rem 0;
+}
+
+.emb-unit-column-title-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+.emb-unit-column-title-stack h2 {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  text-align: center;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: #620607;
+}
+
+@media (min-width: 768px) {
+  .emb-unit-column-title-stack h2 {
+    font-size: 1.15rem;
+  }
+}
+
+/* Material 外刊卡片：与 Unit 列同系半透明磨砂，无描边、无投影 */
+.emb-material-tile {
+  background: var(--emb-glass-bg);
+  backdrop-filter: blur(14px) saturate(1.06);
+  -webkit-backdrop-filter: blur(14px) saturate(1.06);
+  border: none;
+  border-radius: 14px;
+  box-shadow: none;
+}
+
+.emb-col-scroll--unit {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(98, 6, 7, 0.22) transparent;
+}
+
+.emb-col-scroll--unit::-webkit-scrollbar {
+  width: 5px;
+}
+
+.emb-col-scroll--unit::-webkit-scrollbar-thumb {
+  background: rgba(98, 6, 7, 0.22);
+  border-radius: 3px;
+}
+
+@layer components {
+  .emb-field {
+    @apply mt-1 w-full rounded-lg border px-3 py-2 text-sm placeholder:text-[#8a9178];
+    border-color: color-mix(in srgb, var(--emb-accent) 22%, transparent);
+    background-color: rgba(255, 255, 255, 0.85);
+    color: var(--emb-text);
+  }
+  .emb-field:focus {
+    border-color: var(--emb-accent);
+    outline: none;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--emb-accent) 35%, transparent);
+  }
+  .emb-textarea {
+    @apply mt-1 min-h-[100px] w-full rounded-lg border px-3 py-2 text-sm placeholder:text-[#8a9178];
+    border-color: color-mix(in srgb, var(--emb-accent) 22%, transparent);
+    background-color: rgba(255, 255, 255, 0.85);
+    color: var(--emb-text);
+    font-family: var(--emb-font);
+  }
+  .emb-textarea:focus {
+    border-color: var(--emb-accent);
+    outline: none;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--emb-accent) 35%, transparent);
+  }
+  .emb-btn-primary {
+    @apply rounded-lg px-4 py-2 text-sm font-medium text-white transition disabled:opacity-50;
+    background-color: var(--emb-accent);
+  }
+  .emb-btn-primary:hover:not(:disabled) {
+    background-color: var(--emb-accent-hover);
+  }
+  .emb-btn-secondary {
+    @apply rounded-lg border px-4 py-2 text-sm transition;
+    border-color: color-mix(in srgb, var(--emb-heading) 28%, transparent);
+    background-color: var(--emb-glass-bg);
+    color: var(--emb-text);
+  }
+  .emb-btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.38);
+  }
+  .emb-btn-danger {
+    @apply rounded-lg border border-red-400/50 px-4 py-2 text-sm text-red-800 hover:bg-red-50;
+  }
+}
