@@ -53,9 +53,9 @@ export default function UnitBoardCard({ unit, source, tone = 'default' }: Props)
 
   const expandShell = isHome ? 'mt-3 overflow-hidden rounded-[14px]' : 'mt-3 overflow-hidden rounded-[11px]'
 
-  /** 顶：半透明（非纯白）；过渡带整体上移；底：#C63E4E 系实色感 */
+  /** 首页：亮带用卡片壳同色 var(--emb-unit-frost-layer)，避免泛白；底仍为 #C63E4E 系 */
   const expandPanelBg = isHome
-    ? 'linear-gradient(to bottom, rgba(198,62,78,0.05) 0%, rgba(255,255,255,0.06) 6%, rgba(198,62,78,0.16) 22%, rgba(232,115,125,0.72) 36%, rgba(198,62,78,0.92) 100%)'
+    ? 'linear-gradient(to bottom, rgba(198,62,78,0.05) 0%, var(--emb-unit-frost-layer) 8%, var(--emb-unit-frost-layer) 24%, rgba(198,62,78,0.15) 32%, rgba(232,115,125,0.7) 42%, rgba(198,62,78,0.92) 100%)'
     : 'linear-gradient(to bottom, rgba(255,255,255,0.07) 0%, rgba(198,62,78,0.08) 8%, rgba(198,62,78,0.22) 24%, rgba(210,90,100,0.65) 38%, rgba(198,62,78,0.9) 100%)'
 
   const expandPanelPad = isHome ? 'p-3.5' : 'p-3'

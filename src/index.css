@@ -17,8 +17,8 @@
    * 叠层：薄白 + blur；alpha 比底层再低一档，叠在列底上略亮（标题条、卡片壳共用）
    */
   --emb-unit-frost-base: rgba(255, 255, 255, 0.25);
-  /** 列内标题 / 折叠卡片壳：薄白叠层（0.105→0.205，再 +10% 白） */
-  --emb-unit-frost-layer: rgba(255, 255, 255, 0.205);
+  /** 列内标题 / 折叠卡片壳：薄白叠层（与展开区渐变 var 引用保持一致） */
+  --emb-unit-frost-layer: rgba(255, 255, 255, 0.305);
   --emb-panel-deep: #3d3028;
   --emb-font: "Satoshi", system-ui, sans-serif;
   /** 侧栏未选导航 & 首页搜索栏轨道 */
